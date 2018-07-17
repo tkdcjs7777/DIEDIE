@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import GameUserInfo, Ranking
+from django.core.exceptions import ObjectDoesNotExist
 import json
 
 @csrf_exempt 
@@ -21,9 +22,12 @@ def Account(request):
      if request.method == "POST":
          user_id = request.POST['user_id']
          user_password = request.POST['user_password']
-
-        #유저 중복 방지
-         user_obj = GameUserInfo.objects.get(user_id=user_id)
+         
+         try:
+            user_obj = GameUserInfo.objects.get(user_id=user_id)
+         except ObjectDoesNotExist:
+            return JsonResponse({'sucess': 'false'})
+        #유저 중복 가입 방지
          if user_obj:
              return JsonResponse({'sucess': 'false'}) 
 
