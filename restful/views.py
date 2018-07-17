@@ -23,19 +23,21 @@ def Account(request):
          user_id = request.POST['user_id']
          user_password = request.POST['user_password']
 
+         #공백 회원가입 방지
+         if user_id == "" or user_password=="" or user_id == None or user_password == None:
+             return JsonResponse({'sucess': 'false'})
          try:
             user_obj = GameUserInfo.objects.get(user_id=user_id)
          except ObjectDoesNotExist:
-            print("")
+             GameUserInfo.objects.create(user_id=user_id, user_password=user_password)
+             return JsonResponse({'sucess': 'true'})
+
         #유저 중복 가입 방지
          if user_obj:
              return JsonResponse({'sucess': 'false'})
 
-         #공백 회원가입 방지
-         if user_id == "" or user_password=="" or user_id == None or user_password == None:
-             return JsonResponse({'sucess': 'false'})
-         GameUserInfo.objects.create(user_id=user_id, user_password=user_password)
-         return JsonResponse({'sucess': 'true'})
+
+
 
 @csrf_exempt
 def GetTotalRank(request):
