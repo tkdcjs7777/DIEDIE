@@ -21,6 +21,8 @@ def Account(request):
      if request.method == "POST":
          user_id = request.POST['user_id']
          user_password = request.POST['user_password']
+         if user_id == "" or user_password=="":
+             pass
          GameUserInfo.objects.create(user_id=user_id, user_password=user_password)
          return JsonResponse({'sucess': 'true'})
 
@@ -45,7 +47,6 @@ def GetTotalRank(request):
         
 @csrf_exempt
 def GetMyRank(request, user_id):
-    
     #유저 아이디 검색후 정렬 데이터
     rankingObj = Ranking.objects.filter(user_id__user_id__exact=user_id).order_by("clear_time")
     #json 구성요소는 순서, 아이디, 클리어시간 
@@ -62,6 +63,12 @@ def GetMyRank(request, user_id):
     print(json.dumps(JsonRankData))
     return JsonResponse(JsonRankData)
 
+@csrf_exempt
+def SetRank(request, user_id, clear_time):
+    user_obj = GameUserInfo.objects.get(user_id=user_id)
+    Ranking.objects.create(user_id=user_obj,clear_time=float(clear_time))
+    return JsonResponse({'sucess': 'true'})
+    
 
     
 
