@@ -26,9 +26,12 @@ def Account(request):
          #공백 회원가입 방지
          if user_id == "" or user_password=="" or user_id == None or user_password == None:
              return JsonResponse({'sucess': 'false'})
+         #같은 유저가 있을 경우
          try:
             user_obj = GameUserInfo.objects.get(user_id=user_id)
+        #같은 유저가 없을 경우
          except ObjectDoesNotExist:
+             #유저 생성
              GameUserInfo.objects.create(user_id=user_id, user_password=user_password)
              return JsonResponse({'sucess': 'true'})
 
