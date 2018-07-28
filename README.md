@@ -21,5 +21,5 @@ $ source venv/bin/activate
 ```
 3. requirements 설치
 ```
-$ pip3 install -r requirements.txt
+$ pip install -r requirements.txt
 ```
